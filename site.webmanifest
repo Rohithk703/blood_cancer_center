@@ -1,0 +1,17 @@
+{
+  "name": "AP Blood & Blood Cancer Centre",
+  "short_name": "AP Blood Centre",
+  "description": "Hematology and blood cancer clinic",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdf2f4",
+  "theme_color": "#8b1538",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
