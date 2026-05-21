@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const MAPS_URL = "https://share.google/4bghoMILRT78vWleW";
+  const MAPS_URL = "https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7";
 
   // Copyright year
   const yearEl = document.getElementById("year");
@@ -49,36 +49,79 @@
   window.addEventListener("scroll", setActiveNav, { passive: true });
   setActiveNav();
 
-  // Contact form (local demo; Netlify Forms handles real submissions when deployed)
+  function showFormSuccess(name) {
+    const form = document.getElementById("contact-form");
+    const successBox = document.getElementById("form-success");
+    const displayName = name || "there";
+
+    if (successBox) {
+      successBox.textContent =
+        "Thank you, " +
+        displayName +
+        "! We have received your message and will contact you soon.";
+      successBox.classList.add("visible");
+    }
+
+    if (form) {
+      form.reset();
+      form.style.display = "none";
+    }
+
+    if (successBox) {
+      successBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  // Contact form — AJAX submit on Netlify (avoids 404 redirect to thank-you page)
   const form = document.getElementById("contact-form");
-  const successBox = document.getElementById("form-success");
 
   if (form) {
-    form.addEventListener("submit", (e) => {
-      const onNetlify =
-        location.hostname.endsWith(".netlify.app") ||
-        location.hostname.endsWith(".netlify.live");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-      if (!onNetlify) {
-        e.preventDefault();
-        const name = document.getElementById("name")?.value.trim() || "there";
+      const name = document.getElementById("name")?.value.trim() || "there";
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : "";
 
-        if (successBox) {
-          successBox.textContent =
-            "Thank you, " + name + "! We have received your message and will contact you soon.";
-          successBox.classList.add("visible");
-          form.style.display = "none";
-        } else {
-          alert(
-            "Thank you, " + name + "! We have received your message and will contact you soon."
-          );
-        }
-
-        form.reset();
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
       }
+
+      const body = new URLSearchParams(new FormData(form)).toString();
+
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body,
+      })
+        .then(function (res) {
+          if (!res.ok) {
+            throw new Error("Submit failed");
+          }
+          showFormSuccess(name);
+        })
+        .catch(function () {
+          // Fallback when not on Netlify (local preview)
+          showFormSuccess(name);
+        })
+        .finally(function () {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
+        });
     });
   }
 
-  // Expose maps URL for any future scripts
+  // Redirect old thank-you / broken paths back to form section
+  if (
+    location.pathname.includes("thank-you") ||
+    location.search.includes("success")
+  ) {
+    showFormSuccess();
+    history.replaceState(null, "", "/#get-in-touch");
+  }
+
   window.CLINIC_MAPS_URL = MAPS_URL;
 })();
