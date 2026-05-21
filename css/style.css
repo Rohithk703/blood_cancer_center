@@ -432,6 +432,29 @@ section#contact .contact-item {
   margin-bottom: 0.4rem;
 }
 
+.form-group label .required {
+  color: var(--crimson);
+}
+
+.form-group .field-error {
+  display: block;
+  min-height: 1.25rem;
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: #b91c1c;
+}
+
+.form-group .field-error:empty {
+  display: none;
+}
+
+.form-group.invalid input,
+.form-group.invalid textarea,
+.form-group.invalid select {
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+}
+
 .form-group input,
 .form-group textarea,
 .form-group select {

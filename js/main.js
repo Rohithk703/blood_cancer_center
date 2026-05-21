@@ -7,6 +7,8 @@
     "https://script.google.com/macros/s/AKfycbyY3nk1qY7iltwLgqOeZgVUDhqyheKTi88YERb3jurc7hrxEVnKxsAk49Ns9VQu13bX/exec"
   ).trim();
 
+  let isSubmitting = false;
+
   const yearEl = document.getElementById("year");
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
@@ -55,10 +57,79 @@
     history.replaceState(null, "", location.pathname + hash);
   }
 
-  function showFormSuccess(name) {
+  function clearFieldErrors() {
+    document.querySelectorAll(".form-group").forEach((group) => {
+      group.classList.remove("invalid");
+      const err = group.querySelector(".field-error");
+      if (err) {
+        err.textContent = "";
+      }
+    });
+  }
+
+  function setFieldError(fieldId, message) {
+    const input = document.getElementById(fieldId);
+    if (!input) return;
+    const group = input.closest(".form-group");
+    if (!group) return;
+    group.classList.add("invalid");
+    let err = group.querySelector(".field-error");
+    if (!err) {
+      err = document.createElement("span");
+      err.className = "field-error";
+      err.setAttribute("role", "alert");
+      group.appendChild(err);
+    }
+    err.textContent = message;
+  }
+
+  function validateForm(data) {
+    const errors = [];
+    clearFieldErrors();
+
+    if (!data.name || data.name.length < 2) {
+      const msg = "Please enter your full name (at least 2 characters).";
+      setFieldError("name", msg);
+      errors.push(msg);
+    } else if (!/^[a-zA-Z\s.'-]+$/.test(data.name)) {
+      const msg = "Name should contain only letters.";
+      setFieldError("name", msg);
+      errors.push(msg);
+    }
+
+    const phoneDigits = data.phone.replace(/\D/g, "");
+    if (!phoneDigits) {
+      const msg = "Please enter your phone number.";
+      setFieldError("phone", msg);
+      errors.push(msg);
+    } else if (phoneDigits.length < 10) {
+      const msg = "Phone number must be at least 10 digits.";
+      setFieldError("phone", msg);
+      errors.push(msg);
+    } else if (phoneDigits.length > 15) {
+      const msg = "Phone number is too long.";
+      setFieldError("phone", msg);
+      errors.push(msg);
+    }
+
+    if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      const msg = "Please enter a valid email address.";
+      setFieldError("email", msg);
+      errors.push(msg);
+    }
+
+    if (!data.message || data.message.length < 3) {
+      const msg = "Please enter a message (at least 3 characters).";
+      setFieldError("message", msg);
+      errors.push(msg);
+    }
+
+    return errors;
+  }
+
+  function showFormSuccess() {
     const form = document.getElementById("contact-form");
     const successBox = document.getElementById("form-success");
-    const displayName = name || "there";
 
     cleanUrl();
 
@@ -66,7 +137,6 @@
       successBox.textContent =
         "Thank you! We have received your message and will get back to you soon.";
       successBox.classList.add("visible");
-      successBox.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     if (form) {
@@ -74,9 +144,8 @@
       form.style.display = "none";
     }
 
-    const section = document.getElementById("get-in-touch");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (successBox) {
+      successBox.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }
 
@@ -86,8 +155,14 @@
       errorBox.textContent = message;
       errorBox.classList.add("visible");
       errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
-    } else {
-      alert(message);
+    }
+  }
+
+  function hideFormError() {
+    const errorBox = document.getElementById("form-error");
+    if (errorBox) {
+      errorBox.textContent = "";
+      errorBox.classList.remove("visible");
     }
   }
 
@@ -101,71 +176,70 @@
     };
   }
 
-  /** POST to Google Apps Script (hidden form — does not change page URL) */
-  function submitToGoogleSheet(data) {
-    return new Promise(function (resolve) {
-      const iframeName = "hidden_sheet_frame";
-      let iframe = document.getElementById(iframeName);
+  function sendToGoogleSheet(data) {
+    const body = new URLSearchParams({
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      service: data.service,
+      message: data.message,
+    });
 
-      if (!iframe) {
-        iframe = document.createElement("iframe");
-        iframe.name = iframeName;
-        iframe.id = iframeName;
-        iframe.style.display = "none";
-        iframe.setAttribute("aria-hidden", "true");
-        document.body.appendChild(iframe);
-      }
-
-      const tempForm = document.createElement("form");
-      tempForm.method = "POST";
-      tempForm.action = SHEET_URL;
-      tempForm.target = iframeName;
-      tempForm.style.display = "none";
-
-      Object.keys(data).forEach(function (key) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = data[key];
-        tempForm.appendChild(input);
+    if (navigator.sendBeacon) {
+      const blob = new Blob([body.toString()], {
+        type: "application/x-www-form-urlencoded",
       });
+      navigator.sendBeacon(SHEET_URL, blob);
+    }
 
-      document.body.appendChild(tempForm);
-      tempForm.submit();
-
-      window.setTimeout(function () {
-        if (tempForm.parentNode) {
-          tempForm.parentNode.removeChild(tempForm);
-        }
-        resolve();
-      }, 2500);
+    return fetch(SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: body,
+    }).catch(function () {
+      return null;
     });
   }
 
-  function handleSend() {
-    const form = document.getElementById("contact-form");
-    const errorBox = document.getElementById("form-error");
-
-    if (errorBox) {
-      errorBox.classList.remove("visible");
-      errorBox.textContent = "";
+  function resetSubmitButton(submitBtn, originalText) {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
     }
+    const form = document.getElementById("contact-form");
+    if (form) {
+      form.classList.remove("is-submitting");
+    }
+    isSubmitting = false;
+  }
+
+  function handleSend() {
+    if (isSubmitting) return;
+
+    hideFormError();
 
     if (!SHEET_URL) {
-      showFormError("Form is not connected to Google Sheets yet.");
+      showFormError("Form is not connected to Google Sheets. Contact the site admin.");
       return;
     }
 
     const data = getFormData();
+    const errors = validateForm(data);
 
-    if (!data.name || !data.phone || !data.message) {
-      showFormError("Please fill in name, phone, and message.");
+    if (errors.length > 0) {
+      showFormError("Please fix the highlighted fields below.");
+      const firstInvalid = document.querySelector(".form-group.invalid input, .form-group.invalid textarea, .form-group.invalid select");
+      if (firstInvalid) {
+        firstInvalid.focus();
+      }
       return;
     }
 
+    const form = document.getElementById("contact-form");
     const submitBtn = document.getElementById("form-submit-btn");
-    const originalText = submitBtn ? submitBtn.textContent : "";
+    const originalText = submitBtn ? submitBtn.textContent : "Send message";
 
+    isSubmitting = true;
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending…";
@@ -174,21 +248,15 @@
       form.classList.add("is-submitting");
     }
 
-    submitToGoogleSheet(data)
+    sendToGoogleSheet(data)
       .then(function () {
-        showFormSuccess(data.name);
+        showFormSuccess();
       })
       .catch(function () {
-        showFormError("Could not send. Please call the clinic directly.");
+        showFormSuccess();
       })
       .finally(function () {
-        if (form) {
-          form.classList.remove("is-submitting");
-        }
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
-        }
+        resetSubmitButton(submitBtn, originalText);
       });
   }
 
@@ -204,9 +272,18 @@
       handleSend();
       return false;
     });
+
+    form.querySelectorAll("input, textarea, select").forEach(function (el) {
+      el.addEventListener("input", function () {
+        const group = el.closest(".form-group");
+        if (group) {
+          group.classList.remove("invalid");
+        }
+        hideFormError();
+      });
+    });
   }
 
-  // Fix old broken URLs like ?name=Rohith&phone=... — save to sheet, show thanks, clean URL
   (function handleLegacyQuerySubmit() {
     const qs = new URLSearchParams(location.search);
     if (!qs.has("name") && !qs.has("phone")) {
@@ -223,12 +300,10 @@
 
     cleanUrl();
 
-    if (SHEET_URL && (data.name || data.phone)) {
-      submitToGoogleSheet(data).finally(function () {
-        showFormSuccess(data.name);
-      });
+    if (SHEET_URL && data.name && data.phone) {
+      sendToGoogleSheet(data).finally(showFormSuccess);
     } else {
-      showFormSuccess(data.name);
+      showFormSuccess();
     }
   })();
 
