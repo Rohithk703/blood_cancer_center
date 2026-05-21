@@ -143,9 +143,7 @@
             <div class="icon" aria-hidden="true">📍</div>
             <h3>Clinic Location</h3>
             <p>AP Blood &amp; Blood Cancer Centre<br />Hematology &amp; Blood Cancer Clinic</p>
-            <p class="contact-maps-link">
-              <a href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7" target="_blank" rel="noopener noreferrer">Open in Google Maps →</a>
-            </p>
+            <p class="contact-maps-link">See the map at the bottom of this page.</p>
           </div>
           <div class="contact-item">
             <div class="icon" aria-hidden="true">📞</div>
@@ -173,20 +171,10 @@
           <p>Fill in the form below and our team will contact you shortly.</p>
         </div>
 
+        <div id="form-error" class="form-error" role="alert" aria-live="assertive"></div>
         <div id="form-success" class="form-success" role="status" aria-live="polite"></div>
 
-        <form
-          class="form-wrap"
-          id="contact-form"
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-        >
-          <input type="hidden" name="form-name" value="contact" />
-          <p class="hidden-field">
-            <label>Don’t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-          </p>
+        <form class="form-wrap" id="contact-form" novalidate>
 
           <div class="form-group">
             <label for="name">Full name</label>
@@ -223,39 +211,9 @@
       </div>
     </section>
 
-    <section id="location" class="location-section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Our Location</h2>
-          <p>Visit AP Blood &amp; Blood Cancer Centre — directions and reviews on Google Maps.</p>
-        </div>
-        <div class="map-embed">
-          <iframe
-            title="AP Blood & Blood Cancer Centre on Google Maps"
-            src="https://maps.google.com/maps?q=16.5099748,80.6346824&hl=en&z=16&output=embed"
-            width="100%"
-            height="420"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-        <p class="map-actions">
-          <a
-            href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7"
-            class="btn btn-primary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            📍 Open in Google Maps
-          </a>
-        </p>
-      </div>
-    </section>
   </main>
 
-  <footer>
+  <footer id="location">
     <div class="container">
       <div class="footer-grid">
         <div>
@@ -269,15 +227,19 @@
         </div>
         <div class="maps-card">
           <h3>Find us on the map</h3>
-          <p>Get directions, clinic hours, and reviews on Google Maps.</p>
-          <a
-            href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7"
-            class="btn-maps"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            📍 Open Google Maps
-          </a>
+          <p>AP Blood &amp; Blood Cancer Centre — Vijayawada area</p>
+          <div class="map-embed map-embed--footer">
+            <iframe
+              title="AP Blood & Blood Cancer Centre on Google Maps"
+              src="https://maps.google.com/maps?q=16.5099748,80.6346824&hl=en&z=16&output=embed"
+              width="100%"
+              height="260"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         </div>
       </div>
       <div class="footer-bottom">
@@ -287,21 +249,13 @@
           <li><a href="#contact">Contact</a></li>
           <li><a href="#get-in-touch">Get in Touch</a></li>
           <li><a href="#location">Location</a></li>
-          <li><a href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7" target="_blank" rel="noopener noreferrer">Maps</a></li>
+          <li><a href="#location">Maps</a></li>
         </ul>
       </div>
     </div>
   </footer>
 
-  <!-- Static copy for Netlify Forms detection at build time -->
-  <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
-    <input type="text" name="name" />
-    <input type="tel" name="phone" />
-    <input type="email" name="email" />
-    <input type="text" name="service" />
-    <textarea name="message"></textarea>
-  </form>
-
+  <script src="js/config.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
