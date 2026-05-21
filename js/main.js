@@ -2,7 +2,10 @@
   "use strict";
 
   const MAPS_URL = "https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7";
-  const SHEET_URL = (window.SHEET_WEB_APP_URL || "").trim();
+  const SHEET_URL = (
+    window.SHEET_WEB_APP_URL ||
+    "https://script.google.com/macros/s/AKfycbyY3nk1qY7iltwLgqOeZgVUDhqyheKTi88YERb3jurc7hrxEVnKxsAk49Ns9VQu13bX/exec"
+  ).trim();
 
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -47,16 +50,21 @@
   window.addEventListener("scroll", setActiveNav, { passive: true });
   setActiveNav();
 
+  function cleanUrl() {
+    const hash = location.hash || "#get-in-touch";
+    history.replaceState(null, "", location.pathname + hash);
+  }
+
   function showFormSuccess(name) {
     const form = document.getElementById("contact-form");
     const successBox = document.getElementById("form-success");
     const displayName = name || "there";
 
+    cleanUrl();
+
     if (successBox) {
       successBox.textContent =
-        "Thank you, " +
-        displayName +
-        "! We have received your message and will contact you soon.";
+        "Thank you! We have received your message and will get back to you soon.";
       successBox.classList.add("visible");
       successBox.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -64,6 +72,11 @@
     if (form) {
       form.reset();
       form.style.display = "none";
+    }
+
+    const section = document.getElementById("get-in-touch");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
 
@@ -78,128 +91,146 @@
     }
   }
 
-  /**
-   * Sends data via hidden form POST into iframe.
-   * This is the most reliable way to reach Google Apps Script from a static site.
-   */
+  function getFormData() {
+    return {
+      name: document.getElementById("name")?.value.trim() || "",
+      phone: document.getElementById("phone")?.value.trim() || "",
+      email: document.getElementById("email")?.value.trim() || "",
+      service: document.getElementById("service")?.value.trim() || "",
+      message: document.getElementById("message")?.value.trim() || "",
+    };
+  }
+
+  /** POST to Google Apps Script (hidden form — does not change page URL) */
   function submitToGoogleSheet(data) {
-    return new Promise(function (resolve, reject) {
-      var iframeName = "sheet_submit_frame_" + Date.now();
-      var iframe = document.createElement("iframe");
-      iframe.name = iframeName;
-      iframe.style.display = "none";
-      iframe.setAttribute("aria-hidden", "true");
+    return new Promise(function (resolve) {
+      const iframeName = "hidden_sheet_frame";
+      let iframe = document.getElementById(iframeName);
 
-      var settled = false;
-
-      function finish(ok) {
-        if (settled) return;
-        settled = true;
-        window.clearTimeout(timer);
-        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-        if (tempForm.parentNode) tempForm.parentNode.removeChild(tempForm);
-        if (ok) resolve();
-        else reject(new Error("Submit failed"));
+      if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.name = iframeName;
+        iframe.id = iframeName;
+        iframe.style.display = "none";
+        iframe.setAttribute("aria-hidden", "true");
+        document.body.appendChild(iframe);
       }
 
-      iframe.onload = function () {
-        finish(true);
-      };
-
-      var timer = window.setTimeout(function () {
-        finish(true);
-      }, 3000);
-
-      var tempForm = document.createElement("form");
+      const tempForm = document.createElement("form");
       tempForm.method = "POST";
       tempForm.action = SHEET_URL;
       tempForm.target = iframeName;
       tempForm.style.display = "none";
 
       Object.keys(data).forEach(function (key) {
-        var input = document.createElement("input");
+        const input = document.createElement("input");
         input.type = "hidden";
         input.name = key;
         input.value = data[key];
         tempForm.appendChild(input);
       });
 
-      document.body.appendChild(iframe);
       document.body.appendChild(tempForm);
       tempForm.submit();
+
+      window.setTimeout(function () {
+        if (tempForm.parentNode) {
+          tempForm.parentNode.removeChild(tempForm);
+        }
+        resolve();
+      }, 2500);
     });
   }
 
-  const form = document.getElementById("contact-form");
+  function handleSend() {
+    const form = document.getElementById("contact-form");
+    const errorBox = document.getElementById("form-error");
 
+    if (errorBox) {
+      errorBox.classList.remove("visible");
+      errorBox.textContent = "";
+    }
+
+    if (!SHEET_URL) {
+      showFormError("Form is not connected to Google Sheets yet.");
+      return;
+    }
+
+    const data = getFormData();
+
+    if (!data.name || !data.phone || !data.message) {
+      showFormError("Please fill in name, phone, and message.");
+      return;
+    }
+
+    const submitBtn = document.getElementById("form-submit-btn");
+    const originalText = submitBtn ? submitBtn.textContent : "";
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+    }
+    if (form) {
+      form.classList.add("is-submitting");
+    }
+
+    submitToGoogleSheet(data)
+      .then(function () {
+        showFormSuccess(data.name);
+      })
+      .catch(function () {
+        showFormError("Could not send. Please call the clinic directly.");
+      })
+      .finally(function () {
+        if (form) {
+          form.classList.remove("is-submitting");
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+  }
+
+  const submitBtn = document.getElementById("form-submit-btn");
+  if (submitBtn) {
+    submitBtn.addEventListener("click", handleSend);
+  }
+
+  const form = document.getElementById("contact-form");
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      e.stopPropagation();
-
-      const errorBox = document.getElementById("form-error");
-      if (errorBox) {
-        errorBox.classList.remove("visible");
-        errorBox.textContent = "";
-      }
-
-      if (!SHEET_URL) {
-        showFormError(
-          "Form is not connected to Google Sheets. Add your Apps Script URL in js/config.js."
-        );
-        return false;
-      }
-
-      const name = document.getElementById("name")?.value.trim() || "";
-      const phone = document.getElementById("phone")?.value.trim() || "";
-      const email = document.getElementById("email")?.value.trim() || "";
-      const service = document.getElementById("service")?.value.trim() || "";
-      const message = document.getElementById("message")?.value.trim() || "";
-
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.textContent : "";
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending…";
-      }
-
-      form.classList.add("is-submitting");
-
-      submitToGoogleSheet({
-        name: name,
-        phone: phone,
-        email: email,
-        service: service,
-        message: message,
-      })
-        .then(function () {
-          showFormSuccess(name || "there");
-        })
-        .catch(function () {
-          showFormError(
-            "Could not send your message. Please try again or call the clinic."
-          );
-        })
-        .finally(function () {
-          form.classList.remove("is-submitting");
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
-          }
-        });
-
+      handleSend();
       return false;
     });
   }
 
-  if (
-    location.pathname.includes("thank-you") ||
-    location.search.includes("success")
-  ) {
-    showFormSuccess();
-    history.replaceState(null, "", window.location.pathname + "#get-in-touch");
-  }
+  // Fix old broken URLs like ?name=Rohith&phone=... — save to sheet, show thanks, clean URL
+  (function handleLegacyQuerySubmit() {
+    const qs = new URLSearchParams(location.search);
+    if (!qs.has("name") && !qs.has("phone")) {
+      return;
+    }
+
+    const data = {
+      name: qs.get("name") || "",
+      phone: qs.get("phone") || "",
+      email: qs.get("email") || "",
+      service: qs.get("service") || "",
+      message: qs.get("message") || "",
+    };
+
+    cleanUrl();
+
+    if (SHEET_URL && (data.name || data.phone)) {
+      submitToGoogleSheet(data).finally(function () {
+        showFormSuccess(data.name);
+      });
+    } else {
+      showFormSuccess(data.name);
+    }
+  })();
 
   window.CLINIC_MAPS_URL = MAPS_URL;
 })();

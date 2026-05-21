@@ -174,7 +174,7 @@
         <div id="form-error" class="form-error" role="alert" aria-live="assertive"></div>
         <div id="form-success" class="form-success" role="status" aria-live="polite"></div>
 
-        <form class="form-wrap" id="contact-form" novalidate>
+        <form class="form-wrap" id="contact-form" novalidate onsubmit="return false;" action="#" method="post">
 
           <div class="form-group">
             <label for="name">Full name</label>
@@ -205,7 +205,7 @@
             <label for="message">Message</label>
             <textarea id="message" name="message" required placeholder="Briefly describe your concern or preferred appointment time…"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Send message</button>
+          <button type="button" id="form-submit-btn" class="btn btn-primary btn-block">Send message</button>
           <p class="form-note">For urgent medical needs, please call the clinic directly or visit the nearest emergency department.</p>
         </form>
       </div>
@@ -255,7 +255,10 @@
     </div>
   </footer>
 
-  <script src="js/config.js" defer></script>
-  <script src="js/main.js" defer></script>
+  <script>
+    window.SHEET_WEB_APP_URL = window.SHEET_WEB_APP_URL || "https://script.google.com/macros/s/AKfycbyY3nk1qY7iltwLgqOeZgVUDhqyheKTi88YERb3jurc7hrxEVnKxsAk49Ns9VQu13bX/exec";
+  </script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
