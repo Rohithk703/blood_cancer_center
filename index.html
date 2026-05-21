@@ -18,8 +18,8 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=6" />
-  <link rel="stylesheet" href="css/effects.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
+  <link rel="stylesheet" href="css/effects.css?v=7" />
 </head>
 <body>
   <canvas id="fx-canvas" class="fx-canvas" aria-hidden="true"></canvas>
@@ -40,9 +40,8 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#doctors">Doctors</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#location">Location</a></li>
         <li><a href="#get-in-touch" class="nav-cta">Get in Touch</a></li>
+        <li><a href="#location">Contact</a></li>
       </ul>
     </div>
   </header>
@@ -227,46 +226,6 @@
       </div>
     </section>
 
-    <section id="contact" class="section-fx">
-      <div class="container">
-        <div class="section-header reveal">
-          <h2>Contact Us</h2>
-          <p>Reach out for appointments, reports, or general inquiries.</p>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-item reveal reveal-delay-1">
-            <div class="icon" aria-hidden="true">📍</div>
-            <h3>Clinic Location</h3>
-            <p>
-              Beside SBI Zonal Office, 5 No. Bus Route,<br />
-              Suryaraopet, Vijayawada – 520 002
-            </p>
-            <p class="contact-maps-link">
-              <a href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7" target="_blank" rel="noopener noreferrer">Open in Google Maps →</a>
-            </p>
-          </div>
-          <div class="contact-item reveal reveal-delay-2">
-            <div class="icon" aria-hidden="true">📞</div>
-            <h3>Phone &amp; WhatsApp</h3>
-            <p>
-              <a href="https://wa.me/917799509000" target="_blank" rel="noopener noreferrer">+91 77995 09000</a> (WhatsApp)
-            </p>
-            <p><a href="tel:+918662432626">0866-2432626</a> (Landline)</p>
-          </div>
-          <div class="contact-item reveal reveal-delay-3">
-            <div class="icon" aria-hidden="true">✉️</div>
-            <h3>Email</h3>
-            <p>Send reports or questions — we respond within one business day.</p>
-          </div>
-          <div class="contact-item reveal reveal-delay-4">
-            <div class="icon" aria-hidden="true">🕐</div>
-            <h3>Clinic Hours</h3>
-            <p>Mon – Sat: 24HRs <br />Sunday: 10am to 1pm</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="get-in-touch" class="section-fx">
       <div class="container">
         <div class="section-header reveal">
@@ -320,50 +279,93 @@
 
   </main>
 
-  <footer id="location">
+  <footer id="location" class="site-footer">
     <div class="footer-wave" aria-hidden="true">
       <svg viewBox="0 0 1200 48" preserveAspectRatio="none">
         <path class="wave-path" d="M0,24 Q150,0 300,24 T600,24 T900,24 T1200,24 L1200,48 L0,48 Z"/>
         <path class="wave-path" d="M0,32 Q150,8 300,32 T600,32 T900,32 T1200,32 L1200,48 L0,48 Z" opacity="0.6"/>
       </svg>
     </div>
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <a href="#home" class="logo">
-            AP Blood &amp; Blood Cancer Centre
-            <span>Hematology &amp; Blood Cancer Clinic</span>
-          </a>
-          <p class="footer-tagline">
-            Dedicated hematology and blood cancer care — from diagnosis through treatment and long-term follow-up.
-          </p>
-        </div>
-        <div class="maps-card">
-          <h3>Find us on the map</h3>
-          <p>AP Blood &amp; Blood Cancer Centre — Vijayawada area</p>
-          <div class="map-embed map-embed--footer">
-            <iframe
-              title="AP Blood & Blood Cancer Centre on Google Maps"
-              src="https://maps.google.com/maps?q=16.5099748,80.6346824&hl=en&z=16&output=embed"
-              width="100%"
-              height="260"
-              style="border:0;"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+    <div class="container footer-inner">
+      <div class="footer-brand reveal">
+        <a href="#home" class="logo">
+          AP Blood &amp; Blood Cancer Centre
+          <span>Hematology &amp; Blood Cancer Clinic</span>
+        </a>
+        <p class="footer-tagline">
+          Dedicated hematology and blood cancer care — from diagnosis through treatment and long-term follow-up.
+        </p>
+      </div>
+
+      <div class="footer-contact reveal">
+        <h2 class="footer-contact__title">Contact Us</h2>
+        <div class="footer-contact-grid">
+          <div class="footer-contact-item">
+            <span class="footer-contact-item__icon" aria-hidden="true">📍</span>
+            <div>
+              <h3>Address</h3>
+              <p>
+                Beside SBI Zonal Office, 5 No. Bus Route,<br />
+                Suryaraopet, Vijayawada – 520 002
+              </p>
+            </div>
+          </div>
+          <div class="footer-contact-item">
+            <span class="footer-contact-item__icon" aria-hidden="true">📞</span>
+            <div>
+              <h3>Phone &amp; WhatsApp</h3>
+              <p>
+                <a href="https://wa.me/917799509000" target="_blank" rel="noopener noreferrer">+91 77995 09000</a>
+              </p>
+              <p><a href="tel:+918662432626">0866-2432626</a> (Landline)</p>
+            </div>
+          </div>
+          <div class="footer-contact-item">
+            <span class="footer-contact-item__icon" aria-hidden="true">🕐</span>
+            <div>
+              <h3>Clinic Hours</h3>
+              <p>Mon – Sat: 24 hours<br />Sunday: 10 AM – 1 PM</p>
+            </div>
           </div>
         </div>
+        <a
+          href="https://wa.me/917799509000?text=Hello%2C%20I%20would%20like%20to%20contact%20AP%20Blood%20%26%20Blood%20Cancer%20Centre."
+          class="btn btn-whatsapp footer-whatsapp-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Message us on WhatsApp
+        </a>
       </div>
+
+      <div class="maps-card reveal">
+        <h3>Find us on the map</h3>
+        <p>AP Blood &amp; Blood Cancer Centre — Vijayawada</p>
+        <div class="map-embed map-embed--footer">
+          <iframe
+            title="AP Blood & Blood Cancer Centre on Google Maps"
+            src="https://maps.google.com/maps?q=16.5099748,80.6346824&hl=en&z=16&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <a
+          href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7"
+          class="btn-maps"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open in Google Maps
+        </a>
+      </div>
+
       <div class="footer-bottom">
         <span>© <span id="year"></span> AP Blood &amp; Blood Cancer Centre. All rights reserved.</span>
         <ul class="footer-nav">
+          <li><a href="#home">Home</a></li>
           <li><a href="#doctors">Doctors</a></li>
           <li><a href="#services">Services</a></li>
-          <li><a href="#contact">Contact</a></li>
           <li><a href="#get-in-touch">Get in Touch</a></li>
-          <li><a href="#location">Location</a></li>
-          <li><a href="#location">Maps</a></li>
         </ul>
       </div>
     </div>
@@ -386,8 +388,8 @@
   <script>
     window.SHEET_WEB_APP_URL = window.SHEET_WEB_APP_URL || "https://script.google.com/macros/s/AKfycbyY3nk1qY7iltwLgqOeZgVUDhqyheKTi88YERb3jurc7hrxEVnKxsAk49Ns9VQu13bX/exec";
   </script>
-  <script src="js/config.js?v=6"></script>
-  <script src="js/main.js?v=6"></script>
-  <script src="js/effects.js?v=6"></script>
+  <script src="js/config.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="js/effects.js?v=7"></script>
 </body>
 </html>

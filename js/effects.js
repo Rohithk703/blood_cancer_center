@@ -127,7 +127,7 @@
   /* ── Parallax on hero ── */
   function initHeroParallax() {
     const hero = document.querySelector(".hero-bg");
-    if (!hero) return;
+    if (!hero || window.innerWidth < 769) return;
 
     window.addEventListener(
       "scroll",
