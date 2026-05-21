@@ -1,0 +1,606 @@
+/* ═══ Blood & visual FX layer ═══ */
+
+.fx-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.blood-fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.blood-cell {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ff6b7a 0%,
+    #c41e3a 45%,
+    #8b1538 100%
+  );
+  box-shadow:
+    inset -3px -3px 8px rgba(0, 0, 0, 0.2),
+    0 0 12px rgba(196, 30, 58, 0.35);
+  opacity: 0;
+  animation: cellFloat linear infinite;
+}
+
+.blood-cell::after {
+  content: "";
+  position: absolute;
+  inset: 22% 28%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(139, 21, 56, 0.5) 0%,
+    transparent 70%
+  );
+}
+
+.blood-cell--sm {
+  width: 10px;
+  height: 10px;
+}
+
+.blood-cell--md {
+  width: 16px;
+  height: 16px;
+}
+
+.blood-cell--lg {
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes cellFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+  }
+  8% {
+    opacity: 0.7;
+  }
+  92% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-15vh) translateX(var(--drift, 40px)) rotate(360deg);
+  }
+}
+
+/* Hero extras */
+.hero-pulse-ring {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 100, 120, 0.25);
+  animation: pulseRing 3s ease-out infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-pulse-ring:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.hero-pulse-ring:nth-child(3) {
+  animation-delay: 2s;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.hero-ecg {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 2;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.hero-ecg svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ecg-line {
+  fill: none;
+  stroke: #ff8a9b;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: ecgDraw 4s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(255, 100, 120, 0.8));
+}
+
+@keyframes ecgDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hero-dna {
+  position: absolute;
+  top: 18%;
+  right: 8%;
+  width: 80px;
+  height: 140px;
+  opacity: 0.15;
+  z-index: 2;
+  animation: dnaSpin 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes dnaSpin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.hero-vignette-pulse {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 100, 120, 0.2) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 50% 50%,
+      transparent 40%,
+      rgba(139, 21, 56, 0.25) 100%
+    );
+  animation: vignettePulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero {
+  --mx: 50%;
+  --my: 50%;
+}
+
+@keyframes vignettePulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Shimmer badge */
+.hero-badge {
+  animation: badgeShimmer 3s ease-in-out infinite;
+}
+
+@keyframes badgeShimmer {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(232, 196, 154, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(232, 196, 154, 0.4);
+  }
+}
+
+/* Stat cards heartbeat */
+.stat {
+  animation: statGlow 2.5s ease-in-out infinite;
+}
+
+.stat:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.stat:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+.stat:nth-child(4) {
+  animation-delay: 1.2s;
+}
+
+@keyframes statGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(255, 120, 140, 0);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(255, 100, 120, 0.35);
+  }
+}
+
+/* Section backgrounds */
+.section-fx {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-fx::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 21, 56, 0.08) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  animation: blobMove 18s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.section-fx::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 92, 106, 0.1) 0%, transparent 70%);
+  bottom: -80px;
+  left: -80px;
+  animation: blobMove 22s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
+@keyframes blobMove {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(1.15);
+  }
+}
+
+.section-header h2 {
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+  transform: translateX(-50%);
+  animation: lineExpand 1.2s ease forwards;
+}
+
+.reveal.visible .section-header h2::after {
+  width: 80%;
+}
+
+@keyframes lineExpand {
+  to {
+    width: 80%;
+  }
+}
+
+/* Service cards FX */
+.service-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease;
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(139, 21, 56, 0.15) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.service-card:hover::before {
+  transform: translateX(100%);
+}
+
+.service-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 50px rgba(139, 21, 56, 0.2),
+    0 0 0 1px rgba(139, 21, 56, 0.1);
+}
+
+.service-icon {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+.service-card:nth-child(2n) .service-icon {
+  animation-delay: 0.3s;
+}
+
+.service-card:nth-child(3n) .service-icon {
+  animation-delay: 0.6s;
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+/* Contact cards */
+.contact-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(139, 21, 56, 0.15);
+}
+
+.contact-item .icon {
+  animation: iconBounce 3s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Form glow */
+.form-wrap {
+  position: relative;
+}
+
+.form-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius) + 2px);
+  background: linear-gradient(
+    45deg,
+    var(--crimson),
+    #ff6b7a,
+    var(--crimson-dark),
+    var(--crimson)
+  );
+  background-size: 300% 300%;
+  z-index: -1;
+  opacity: 0.35;
+  animation: gradientBorder 6s ease infinite;
+}
+
+@keyframes gradientBorder {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  animation: inputGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes inputGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(196, 30, 58, 0.25);
+  }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 {
+  transition-delay: 0.1s;
+}
+.reveal-delay-2 {
+  transition-delay: 0.2s;
+}
+.reveal-delay-3 {
+  transition-delay: 0.3s;
+}
+.reveal-delay-4 {
+  transition-delay: 0.4s;
+}
+
+/* Footer blood wave */
+.footer-wave {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 48px;
+  transform: translateY(-99%);
+  overflow: hidden;
+  line-height: 0;
+}
+
+.footer-wave svg {
+  width: 200%;
+  height: 48px;
+  animation: waveSlide 12s linear infinite;
+}
+
+.wave-path {
+  fill: var(--crimson-dark);
+  opacity: 0.95;
+}
+
+@keyframes waveSlide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+footer {
+  position: relative;
+}
+
+/* Nav link underline anim */
+.nav-links a:not(.nav-cta) {
+  position: relative;
+}
+
+.nav-links a:not(.nav-cta)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--crimson);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:not(.nav-cta):hover::after,
+.nav-links a:not(.nav-cta).active::after {
+  width: 100%;
+}
+
+/* Logo subtle pulse */
+.logo {
+  animation: logoPulse 4s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(139, 21, 56, 0.25));
+  }
+}
+
+/* Btn ripple feel */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  animation: btnShine 3s ease-in-out infinite;
+}
+
+@keyframes btnShine {
+  0% {
+    transform: translateX(-120%);
+  }
+  40%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+main,
+header,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-float {
+    animation: none;
+  }
+
+  .blood-cell,
+  .hero-pulse-ring,
+  .hero-ecg .ecg-line,
+  .hero-dna,
+  .hero-vignette-pulse,
+  .hero-badge,
+  .stat,
+  .service-icon,
+  .contact-item .icon,
+  .form-wrap::before,
+  .footer-wave svg,
+  .logo,
+  .btn-primary::after,
+  .fx-canvas {
+    animation: none !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .fx-canvas,
+  .blood-fx-layer {
+    display: none;
+  }
+}

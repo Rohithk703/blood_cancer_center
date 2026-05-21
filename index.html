@@ -18,9 +18,13 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="stylesheet" href="css/effects.css?v=6" />
 </head>
 <body>
+  <canvas id="fx-canvas" class="fx-canvas" aria-hidden="true"></canvas>
+  <div id="blood-fx-layer" class="blood-fx-layer" aria-hidden="true"></div>
+
   <a href="#main" class="skip-link">Skip to main content</a>
 
   <header>
@@ -34,6 +38,7 @@
       </button>
       <ul class="nav-links" id="nav-links">
         <li><a href="#home">Home</a></li>
+        <li><a href="#doctors">Doctors</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="#location">Location</a></li>
@@ -50,8 +55,24 @@
         <div class="hero-slide hero-slide--3"></div>
         <div class="hero-slide hero-slide--4"></div>
         <div class="hero-overlay"></div>
+        <div class="hero-vignette-pulse"></div>
         <div class="hero-bokeh">
           <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="hero-ecg" aria-hidden="true">
+          <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path class="ecg-line" d="M0,30 L40,30 L50,10 L60,50 L70,30 L120,30 L130,5 L145,55 L160,30 L220,30 L235,20 L250,40 L265,30 L340,30 L355,8 L375,52 L395,30 L480,30 L495,15 L510,45 L525,30 L600,30 L615,12 L635,48 L655,30 L740,30 L755,18 L770,42 L785,30 L860,30 L875,6 L900,54 L925,30 L1000,30 L1015,22 L1030,38 L1045,30 L1120,30 L1135,10 L1155,50 L1175,30 L1200,30" />
+          </svg>
+        </div>
+        <div class="hero-dna" aria-hidden="true">
+          <svg viewBox="0 0 40 80" fill="none" stroke="#ff8a9b" stroke-width="1.5">
+            <path d="M10 0 Q25 20 10 40 Q-5 60 10 80" opacity="0.8"/>
+            <path d="M30 0 Q15 20 30 40 Q45 60 30 80" opacity="0.8"/>
+            <line x1="10" y1="0" x2="30" y2="0"/><line x1="10" y1="20" x2="30" y2="20"/>
+            <line x1="10" y1="40" x2="30" y2="40"/><line x1="10" y1="60" x2="30" y2="60"/>
+            <line x1="10" y1="80" x2="30" y2="80"/>
+          </svg>
         </div>
       </div>
       <div class="container hero-grid hero-content">
@@ -64,10 +85,14 @@
           </p>
           <div class="hero-actions">
             <a href="#get-in-touch" class="btn btn-primary">Book a consultation</a>
+            <a href="https://wa.me/917799509000?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20AP%20Blood%20%26%20Blood%20Cancer%20Centre." class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
             <a href="#services" class="btn btn-outline">Our services</a>
           </div>
         </div>
         <div class="hero-card">
+          <div class="hero-pulse-ring" aria-hidden="true"></div>
+          <div class="hero-pulse-ring" aria-hidden="true"></div>
+          <div class="hero-pulse-ring" aria-hidden="true"></div>
           <h3>Why patients choose us</h3>
           <div class="hero-stats">
             <div class="stat">
@@ -91,49 +116,109 @@
       </div>
     </section>
 
-    <section id="services">
+    <section id="doctors" class="section-fx doctors-section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
+          <h2>Our Doctors</h2>
+          <p>Experienced specialists dedicated to hematology, blood cancer care, and patient support.</p>
+        </div>
+        <div class="doctors-grid">
+          <article class="doctor-card reveal reveal-delay-1">
+            <div class="doctor-card__header">
+              <div class="doctor-avatar" aria-hidden="true">🩸</div>
+              <div>
+                <h3>Dr. Amarnadh Polisetty</h3>
+                <p class="doctor-reg">Reg. No. 114598</p>
+              </div>
+            </div>
+            <p class="doctor-role">Hematology &amp; Hemato-Oncology Specialist</p>
+            <ul class="doctor-quals">
+              <li>MBBS., MD Gen.Med (Manipal)</li>
+              <li>DrNB Hematology &amp; Hemato-Oncology</li>
+              <li>Bone Marrow Transplant Physician</li>
+            </ul>
+            <ul class="doctor-specialties">
+              <li>Anemia &amp; low platelets</li>
+              <li>Leukemia, lymphoma &amp; myeloma</li>
+              <li>Bleeding &amp; coagulation disorders</li>
+            </ul>
+            <div class="doctor-actions">
+              <a href="https://wa.me/917799509000?text=Hello%20Dr.%20Amarnadh%2C%20I%20would%20like%20to%20consult%20at%20AP%20Blood%20%26%20Blood%20Cancer%20Centre." class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+              <a href="tel:+917799509000" class="btn btn-outline-dark btn-sm">Call now</a>
+            </div>
+          </article>
+
+          <article class="doctor-card reveal reveal-delay-2">
+            <div class="doctor-card__header">
+              <div class="doctor-avatar doctor-avatar--alt" aria-hidden="true">👩‍⚕️</div>
+              <div>
+                <h3>Dr. Ramya Polisetty</h3>
+                <p class="doctor-reg">Reg. No. 74686</p>
+              </div>
+            </div>
+            <p class="doctor-role">Obstetrics, Gynaecology &amp; Laparoscopy</p>
+            <ul class="doctor-quals">
+              <li>MBBS, DNB, OBG, FMAS</li>
+              <li>Fellowship in Laparoscopy &amp; Hysteroscopy</li>
+            </ul>
+            <p class="doctor-clinic-note">Ramya Maternity &amp; Laparoscopic Center — same campus</p>
+            <ul class="doctor-specialties">
+              <li>PCOD &amp; infertility</li>
+              <li>Painless delivery &amp; high-risk pregnancy</li>
+              <li>Hysteroscopy &amp; laparoscopy</li>
+            </ul>
+            <div class="doctor-actions">
+              <a href="https://wa.me/917799509000?text=Hello%20Dr.%20Ramya%2C%20I%20would%20like%20to%20consult%20at%20Ramya%20Maternity%20%26%20Laparoscopic%20Center." class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+              <a href="tel:+918662432626" class="btn btn-outline-dark btn-sm">Clinic landline</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section-fx">
+      <div class="container">
+        <div class="section-header reveal">
           <h2>Available Services</h2>
           <p>Comprehensive hematology and blood cancer services under one roof.</p>
         </div>
         <div class="services-grid">
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-1">
             <div class="service-icon" aria-hidden="true">🩸</div>
             <h3>Blood Cancer Diagnosis</h3>
             <p>Evaluation and staging for leukemia, lymphoma, myeloma, and related conditions.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-2">
             <div class="service-icon" aria-hidden="true">🔬</div>
             <h3>Hematology Consultation</h3>
             <p>Expert opinion on anemia, clotting disorders, and other blood-related illnesses.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-3">
             <div class="service-icon" aria-hidden="true">💉</div>
             <h3>Chemotherapy &amp; Day Care</h3>
             <p>Supervised infusion therapy and day-care support for oncology patients.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-4">
             <div class="service-icon" aria-hidden="true">🧬</div>
             <h3>Bone Marrow &amp; Stem Cell Care</h3>
             <p>Assessment, counseling, and coordination for transplant-eligible patients.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-1">
             <div class="service-icon" aria-hidden="true">🩺</div>
             <h3>Blood Transfusion Support</h3>
             <p>Safe transfusion services and management of transfusion-dependent conditions.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-2">
             <div class="service-icon" aria-hidden="true">📋</div>
             <h3>Lab &amp; Pathology Coordination</h3>
             <p>Complete blood counts, bone marrow studies, flow cytometry, and molecular tests.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-3">
             <div class="service-icon" aria-hidden="true">💊</div>
             <h3>Targeted &amp; Supportive Therapy</h3>
             <p>Personalized treatment plans including targeted agents and supportive medications.</p>
           </article>
-          <article class="service-card">
+          <article class="service-card reveal reveal-delay-4">
             <div class="service-icon" aria-hidden="true">🤝</div>
             <h3>Patient &amp; Family Counseling</h3>
             <p>Guidance on treatment options, lifestyle, nutrition, and emotional well-being.</p>
@@ -142,31 +227,38 @@
       </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" class="section-fx">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
           <h2>Contact Us</h2>
           <p>Reach out for appointments, reports, or general inquiries.</p>
         </div>
         <div class="contact-grid">
-          <div class="contact-item">
+          <div class="contact-item reveal reveal-delay-1">
             <div class="icon" aria-hidden="true">📍</div>
             <h3>Clinic Location</h3>
-            <p>AP Blood &amp; Blood Cancer Centre<br />Hematology &amp; Blood Cancer Clinic</p>
-            <p class="contact-maps-link">See the map at the bottom of this page.</p>
+            <p>
+              Beside SBI Zonal Office, 5 No. Bus Route,<br />
+              Suryaraopet, Vijayawada – 520 002
+            </p>
+            <p class="contact-maps-link">
+              <a href="https://maps.app.goo.gl/3TKLfb5aUyR8mV2E7" target="_blank" rel="noopener noreferrer">Open in Google Maps →</a>
+            </p>
           </div>
-          <div class="contact-item">
+          <div class="contact-item reveal reveal-delay-2">
             <div class="icon" aria-hidden="true">📞</div>
-            <h3>Phone</h3>
-            <p>+91 77995 09000</p>
-            <p>Call during clinic hours for appointments and emergencies.</p>
+            <h3>Phone &amp; WhatsApp</h3>
+            <p>
+              <a href="https://wa.me/917799509000" target="_blank" rel="noopener noreferrer">+91 77995 09000</a> (WhatsApp)
+            </p>
+            <p><a href="tel:+918662432626">0866-2432626</a> (Landline)</p>
           </div>
-          <div class="contact-item">
+          <div class="contact-item reveal reveal-delay-3">
             <div class="icon" aria-hidden="true">✉️</div>
             <h3>Email</h3>
             <p>Send reports or questions — we respond within one business day.</p>
           </div>
-          <div class="contact-item">
+          <div class="contact-item reveal reveal-delay-4">
             <div class="icon" aria-hidden="true">🕐</div>
             <h3>Clinic Hours</h3>
             <p>Mon – Sat: 24HRs <br />Sunday: 10am to 1pm</p>
@@ -175,9 +267,9 @@
       </div>
     </section>
 
-    <section id="get-in-touch">
+    <section id="get-in-touch" class="section-fx">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
           <h2>Get in Touch</h2>
           <p>Fill in the form below and our team will contact you shortly.</p>
         </div>
@@ -185,7 +277,7 @@
         <div id="form-error" class="form-error" role="alert" aria-live="assertive"></div>
         <div id="form-success" class="form-success" role="status" aria-live="polite"></div>
 
-        <form class="form-wrap" id="contact-form" novalidate onsubmit="return false;" action="#" method="post">
+        <form class="form-wrap reveal reveal-delay-2" id="contact-form" novalidate onsubmit="return false;" action="#" method="post">
 
           <div class="form-group">
             <label for="name">Full name <span class="required">*</span></label>
@@ -229,6 +321,12 @@
   </main>
 
   <footer id="location">
+    <div class="footer-wave" aria-hidden="true">
+      <svg viewBox="0 0 1200 48" preserveAspectRatio="none">
+        <path class="wave-path" d="M0,24 Q150,0 300,24 T600,24 T900,24 T1200,24 L1200,48 L0,48 Z"/>
+        <path class="wave-path" d="M0,32 Q150,8 300,32 T600,32 T900,32 T1200,32 L1200,48 L0,48 Z" opacity="0.6"/>
+      </svg>
+    </div>
     <div class="container">
       <div class="footer-grid">
         <div>
@@ -260,6 +358,7 @@
       <div class="footer-bottom">
         <span>© <span id="year"></span> AP Blood &amp; Blood Cancer Centre. All rights reserved.</span>
         <ul class="footer-nav">
+          <li><a href="#doctors">Doctors</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="#get-in-touch">Get in Touch</a></li>
@@ -270,10 +369,25 @@
     </div>
   </footer>
 
+  <a
+    href="https://wa.me/917799509000?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment%20at%20AP%20Blood%20%26%20Blood%20Cancer%20Centre."
+    class="whatsapp-float"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Chat on WhatsApp"
+    title="Chat on WhatsApp"
+  >
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="whatsapp-float__label">WhatsApp</span>
+  </a>
+
   <script>
     window.SHEET_WEB_APP_URL = window.SHEET_WEB_APP_URL || "https://script.google.com/macros/s/AKfycbyY3nk1qY7iltwLgqOeZgVUDhqyheKTi88YERb3jurc7hrxEVnKxsAk49Ns9VQu13bX/exec";
   </script>
-  <script src="js/config.js?v=3"></script>
-  <script src="js/main.js?v=3"></script>
+  <script src="js/config.js?v=6"></script>
+  <script src="js/main.js?v=6"></script>
+  <script src="js/effects.js?v=6"></script>
 </body>
 </html>

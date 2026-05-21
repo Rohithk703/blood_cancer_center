@@ -300,6 +300,31 @@ header {
   animation-delay: 3s;
 }
 
+.hero-bokeh span:nth-child(6) {
+  width: 70px;
+  height: 70px;
+  top: 8%;
+  right: 35%;
+  animation-delay: 1.5s;
+  background: radial-gradient(circle, rgba(255, 120, 140, 0.4) 0%, transparent 70%);
+}
+
+.hero-bokeh span:nth-child(7) {
+  width: 90px;
+  height: 90px;
+  bottom: 10%;
+  left: 15%;
+  animation-delay: 2.5s;
+}
+
+.hero-bokeh span:nth-child(8) {
+  width: 50px;
+  height: 50px;
+  top: 45%;
+  left: 5%;
+  animation-delay: 0.5s;
+}
+
 @keyframes bokehFloat {
   0%,
   100% {
@@ -448,12 +473,14 @@ header {
 }
 
 .hero-card {
+  position: relative;
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
   padding: 2rem;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(14px);
+  overflow: hidden;
 }
 
 .hero-card h3 {
@@ -513,6 +540,213 @@ section:nth-of-type(even) {
 
 .section-header p {
   color: var(--muted);
+}
+
+/* Doctors */
+.doctors-section {
+  background: var(--white);
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.doctor-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(139, 21, 56, 0.15);
+}
+
+.doctor-card__header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.doctor-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose) 0%, #fce4e8 100%);
+  border: 3px solid var(--crimson);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.doctor-avatar--alt {
+  border-color: #9b59b6;
+  background: linear-gradient(135deg, #f3e8ff 0%, #fce4ec 100%);
+}
+
+.doctor-card h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.35rem;
+  color: var(--crimson-dark);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.doctor-reg {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.doctor-role {
+  font-weight: 600;
+  color: var(--crimson);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.doctor-quals,
+.doctor-specialties {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+.doctor-quals li,
+.doctor-specialties li {
+  position: relative;
+  padding-left: 1.1rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.doctor-quals li::before,
+.doctor-specialties li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--crimson);
+}
+
+.doctor-specialties {
+  margin-bottom: 1.25rem;
+}
+
+.doctor-clinic-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.doctor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.btn-sm {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.88rem;
+}
+
+.btn-whatsapp {
+  background: #25d366;
+  color: var(--white) !important;
+  border: none;
+  text-decoration: none !important;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+}
+
+.btn-whatsapp:hover {
+  background: #1fb855;
+  transform: translateY(-1px);
+  text-decoration: none !important;
+}
+
+.hero .btn-whatsapp {
+  background: #25d366;
+  color: var(--white) !important;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.hero .btn-whatsapp:hover {
+  background: #1fb855;
+}
+
+.btn-outline-dark {
+  background: var(--white);
+  color: var(--crimson-dark);
+  border: 2px solid var(--border);
+  text-decoration: none !important;
+}
+
+.btn-outline-dark:hover {
+  border-color: var(--crimson);
+  text-decoration: none !important;
+}
+
+/* Floating WhatsApp */
+.whatsapp-float {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #25d366;
+  color: var(--white);
+  padding: 0.85rem 1.1rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+  text-decoration: none !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: whatsappPulse 2.5s ease-in-out infinite;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 36px rgba(37, 211, 102, 0.55);
+  text-decoration: none !important;
+  color: var(--white);
+}
+
+.whatsapp-float__label {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .whatsapp-float__label {
+    display: inline;
+  }
+}
+
+@keyframes whatsappPulse {
+  0%,
+  100% {
+    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+  }
+  50% {
+    box-shadow: 0 8px 36px rgba(37, 211, 102, 0.7), 0 0 0 8px rgba(37, 211, 102, 0.15);
+  }
 }
 
 /* Services */
