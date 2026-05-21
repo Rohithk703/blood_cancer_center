@@ -1,14 +1,6 @@
 /**
  * AP Blood Centre — Form to Google Sheet
- *
- * Setup:
- * 1. Create a new Google Sheet
- * 2. Extensions → Apps Script → paste this file → Save
- * 3. Run setupSheet() once (authorize when prompted)
- * 4. Deploy → New deployment → Web app
- *    - Execute as: Me
- *    - Who has access: Anyone
- * 5. Copy the Web app URL into js/config.js
+ * Deploy as Web app → Anyone can access
  */
 
 function setupSheet() {
@@ -32,37 +24,87 @@ function setupSheet() {
   sheet.setFrozenRows(1);
 }
 
-function doPost(e) {
+function doGet(e) {
   try {
-    var params = e.parameter || {};
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Submissions");
-
-    if (!sheet) {
-      setupSheet();
-      sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Submissions");
+    var params = (e && e.parameter) ? e.parameter : {};
+    if (params.name || params.phone || params.message) {
+      saveRow_(params);
+      return textResponse("success");
     }
-
-    sheet.appendRow([
-      new Date(),
-      params.name || "",
-      params.phone || "",
-      params.email || "",
-      params.service || "",
-      params.message || "",
-    ]);
-
-    return jsonResponse({ result: "success" });
+    return textResponse("ok");
   } catch (err) {
-    return jsonResponse({ result: "error", message: String(err) });
+    return textResponse("error: " + err);
   }
 }
 
-function doGet() {
-  return jsonResponse({ result: "ok", message: "Form endpoint is running." });
+function doPost(e) {
+  try {
+    var params = getParams_(e);
+    saveRow_(params);
+    return textResponse("success");
+  } catch (err) {
+    return textResponse("error: " + err);
+  }
 }
 
-function jsonResponse(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(
-    ContentService.MimeType.JSON
+function getParams_(e) {
+  var params = {};
+
+  if (e && e.parameter) {
+    params = e.parameter;
+  }
+
+  if (e && e.postData && e.postData.contents) {
+    var contents = e.postData.contents;
+    var type = e.postData.type || "";
+
+    if (type.indexOf("application/json") !== -1) {
+      try {
+        var json = JSON.parse(contents);
+        for (var key in json) {
+          if (json.hasOwnProperty(key)) {
+            params[key] = json[key];
+          }
+        }
+      } catch (err) {
+        // ignore JSON parse errors
+      }
+    } else {
+      var pairs = contents.split("&");
+      for (var i = 0; i < pairs.length; i++) {
+        var part = pairs[i].split("=");
+        if (part.length === 2) {
+          params[decodeURIComponent(part[0])] = decodeURIComponent(
+            part[1].replace(/\+/g, " ")
+          );
+        }
+      }
+    }
+  }
+
+  return params;
+}
+
+function saveRow_(params) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Submissions");
+
+  if (!sheet) {
+    setupSheet();
+    sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Submissions");
+  }
+
+  sheet.appendRow([
+    new Date(),
+    params.name || "",
+    params.phone || "",
+    params.email || "",
+    params.service || "",
+    params.message || "",
+  ]);
+}
+
+function textResponse(text) {
+  return ContentService.createTextOutput(text).setMimeType(
+    ContentService.MimeType.TEXT
   );
 }

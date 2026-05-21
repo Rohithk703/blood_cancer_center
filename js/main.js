@@ -78,37 +78,61 @@
     }
   }
 
-  function submitToGoogleSheet(form) {
-    const name = document.getElementById("name")?.value.trim() || "";
-    const phone = document.getElementById("phone")?.value.trim() || "";
-    const email = document.getElementById("email")?.value.trim() || "";
-    const service = document.getElementById("service")?.value.trim() || "";
-    const message = document.getElementById("message")?.value.trim() || "";
+  /**
+   * Sends data via hidden form POST into iframe.
+   * This is the most reliable way to reach Google Apps Script from a static site.
+   */
+  function submitToGoogleSheet(data) {
+    return new Promise(function (resolve, reject) {
+      var iframeName = "sheet_submit_frame_" + Date.now();
+      var iframe = document.createElement("iframe");
+      iframe.name = iframeName;
+      iframe.style.display = "none";
+      iframe.setAttribute("aria-hidden", "true");
 
-    const body = new URLSearchParams({
-      name: name,
-      phone: phone,
-      email: email,
-      service: service,
-      message: message,
-    }).toString();
+      var settled = false;
 
-    return fetch(SHEET_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: body,
-    }).then(function () {
-      showFormSuccess(name || "there");
+      function finish(ok) {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+        if (tempForm.parentNode) tempForm.parentNode.removeChild(tempForm);
+        if (ok) resolve();
+        else reject(new Error("Submit failed"));
+      }
+
+      iframe.onload = function () {
+        finish(true);
+      };
+
+      var timer = window.setTimeout(function () {
+        finish(true);
+      }, 3000);
+
+      var tempForm = document.createElement("form");
+      tempForm.method = "POST";
+      tempForm.action = SHEET_URL;
+      tempForm.target = iframeName;
+      tempForm.style.display = "none";
+
+      Object.keys(data).forEach(function (key) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = data[key];
+        tempForm.appendChild(input);
+      });
+
+      document.body.appendChild(iframe);
+      document.body.appendChild(tempForm);
+      tempForm.submit();
     });
   }
 
   const form = document.getElementById("contact-form");
 
   if (form) {
-    form.setAttribute("action", "#");
-    form.setAttribute("method", "get");
-
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -121,10 +145,16 @@
 
       if (!SHEET_URL) {
         showFormError(
-          "Form is not connected to Google Sheets yet. Admin: add your Apps Script URL in js/config.js (see GOOGLE_SHEETS_SETUP.md)."
+          "Form is not connected to Google Sheets. Add your Apps Script URL in js/config.js."
         );
         return false;
       }
+
+      const name = document.getElementById("name")?.value.trim() || "";
+      const phone = document.getElementById("phone")?.value.trim() || "";
+      const email = document.getElementById("email")?.value.trim() || "";
+      const service = document.getElementById("service")?.value.trim() || "";
+      const message = document.getElementById("message")?.value.trim() || "";
 
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalText = submitBtn ? submitBtn.textContent : "";
@@ -136,10 +166,19 @@
 
       form.classList.add("is-submitting");
 
-      submitToGoogleSheet(form)
+      submitToGoogleSheet({
+        name: name,
+        phone: phone,
+        email: email,
+        service: service,
+        message: message,
+      })
+        .then(function () {
+          showFormSuccess(name || "there");
+        })
         .catch(function () {
           showFormError(
-            "Could not send your message. Please try again or call the clinic directly."
+            "Could not send your message. Please try again or call the clinic."
           );
         })
         .finally(function () {

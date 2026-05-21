@@ -30,6 +30,8 @@ You should see a **Submissions** tab with headers: Timestamp, Name, Phone, Email
 4. **Who has access:** Anyone  
 5. Click **Deploy** → copy the **Web app URL** (looks like `https://script.google.com/macros/s/...../exec`)
 
+**Important:** If you change `Code.gs` later, use **Deploy → Manage deployments → Edit → New version → Deploy**. Old URLs keep working only after you publish a new version.
+
 ## 5. Connect the website
 
 1. Open `js/config.js`
@@ -54,5 +56,5 @@ Share the Google Sheet with your admin Gmail (**Share** → Editor or Viewer).
 | Problem | Fix |
 |--------|-----|
 | Form says “not configured” | Set `SHEET_WEB_APP_URL` in `js/config.js` and redeploy |
-| No new rows | Re-run deployment; ensure access is **Anyone** |
+| No new rows | In Apps Script: **Deploy → Manage deployments → Edit → New version → Deploy**. Ensure access is **Anyone**. Then redeploy the website on Netlify. |
 | Still 404 after submit | Redeploy full `blood_cancer_center` folder; hard-refresh browser (Ctrl+F5) |
