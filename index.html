@@ -18,7 +18,7 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to main content</a>
@@ -44,10 +44,20 @@
 
   <main id="main">
     <section class="hero" id="home">
-      <div class="container hero-grid">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-slide hero-slide--1"></div>
+        <div class="hero-slide hero-slide--2"></div>
+        <div class="hero-slide hero-slide--3"></div>
+        <div class="hero-slide hero-slide--4"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-bokeh">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="container hero-grid hero-content">
         <div>
           <span class="hero-badge">Specialized Hematology Care</span>
-          <h1>Compassionate care for blood disorders &amp; blood cancers</h1>
+          <h1>Compassionate care for blood disorders &amp; <em>blood cancers</em></h1>
           <p>
             AP Blood &amp; Blood Cancer Centre offers expert diagnosis, treatment planning,
             and ongoing support for patients and families facing hematologic conditions.
@@ -148,6 +158,7 @@
           <div class="contact-item">
             <div class="icon" aria-hidden="true">📞</div>
             <h3>Phone</h3>
+            <p>+91 77995 09000</p>
             <p>Call during clinic hours for appointments and emergencies.</p>
           </div>
           <div class="contact-item">
@@ -158,7 +169,7 @@
           <div class="contact-item">
             <div class="icon" aria-hidden="true">🕐</div>
             <h3>Clinic Hours</h3>
-            <p>Mon – Sat: 9:00 AM – 7:00 PM<br />Sunday: By appointment</p>
+            <p>Mon – Sat: 24HRs <br />Sunday: 10am to 1pm</p>
           </div>
         </div>
       </div>
